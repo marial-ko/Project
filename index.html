@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Convert JSON to XLS and Download</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.17.3/dist/xlsx.full.min.js"></script>
+	
+    <script src="https://rawgit.com/google/code-prettify/master/loader/run_prettify.js?autoload=true&amp;skin=sunburst&amp;lang=css" defer></script>
+    <style type="text/css">
+    .operative {
+        font-weight: bold;
+        border: 1px solid yellow;
+    }
+
+    #quine {
+        border: 4px solid #88c;
+    }
+
+    .spacer {
+        margin-top: 30px;
+    }
+    </style>
+</head>
+
+<body class="container">
+    <script>
+    function downloadXLS(){
+
+
+        var createXLSLFormatObj = [];
+
+        /* XLS Head Columns */
+        var xlsHeader = ["TaskNumber", "ExecutorInfo", "Solution", "Rating"];
+
+        /* XLS Rows Data */
+        var xlsRows = [{
+                "TaskNumber": "1",
+                "ExecutorInfo": "Базаров Е. В.",
+				"Solution": "Исправьте общество и болезней не будет.",
+				"Rating": "3"
+            },
+            {
+                "TaskNumber": "2",
+                "ExecutorInfo": "Фамусов П. А.",
+				"Solution": "Ученье — вот чума, ученость — вот причина.",
+				"Rating": "2"
+            },
+            {
+                "TaskNumber": "3",
+                "ExecutorInfo": "Болконский А. Н.",
+				"Solution": "Ежели бы все воевали только по своим убеждениям, войны бы не было.",
+				"Rating": "5"
+            }
+            
+        ];
+
+
+        createXLSLFormatObj.push(xlsHeader);
+        $.each(xlsRows, function(index, value) {
+            var innerRowData = [];
+            $("tbody").append('<tr><td>' + value.TaskNumber + '</td><td>' + value.ExecutorInfo + '</td><td>'+ value.Solution + '</td><td>'+ value.Rating + '</td></tr>');
+            $.each(value, function(ind, val) {
+
+                innerRowData.push(val);
+            });
+            createXLSLFormatObj.push(innerRowData);
+        });
+
+
+        /* File Name */
+        var filename = "Solutions.xlsx";
+
+        /* Sheet Name */
+        var ws_name = "Варианты решений";
+
+        if (typeof console !== 'undefined') console.log(new Date());
+        var wb = XLSX.utils.book_new(),
+            ws = XLSX.utils.aoa_to_sheet(createXLSLFormatObj);
+
+        /* Add worksheet to workbook */
+        XLSX.utils.book_append_sheet(wb, ws, ws_name);
+
+        /* Write workbook and Download */
+        if (typeof console !== 'undefined') console.log(new Date());
+        XLSX.writeFile(wb, filename);
+        if (typeof console !== 'undefined') console.log(new Date());
+
+    }
+    </script>
+    <span class="display-4 spacer">Convert JSON data into XLS EXCEL and Download</span>
+	<div style="text-align:center;">
+    <button type="button" class="btn btn-primary" style="font-size: 25px;" onclick="downloadXLS()">Скачать таблицу</button>
+</div>
+    <h4 class="display-5 spacer">Табличный формат данных для загрузки</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Номер задачи</th>
+                <th scope="col">Информация об исполнителе</th>
+				<th scope="col">Предложенное решение</th>
+				<th scope="col">Оценка</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <h4 class="display-5 spacer">JSON формат данных для загрузки</h4>
+    <!-- Language hints can be put in XML application directive style comments. -->
+    <!--?prettify lang=html linenums=true?-->
+        <pre class="prettyprint" id="quine">
+
+
+[{
+                "TaskNumber": "1",
+                "ExecutorInfo": "Базаров Е. В.",
+				"Solution": "Исправьте общество и болезней не будет.",
+				"Rating": "3"
+            },
+            {
+                "TaskNumber": "2",
+                "ExecutorInfo": "Фамусов П. А.",
+				"Solution": "Ученье — вот чума, ученость — вот причина.",
+				"Rating": "2"
+            },
+            {
+                "TaskNumber": "3",
+				"ExecutorInfo": "Болконский А. Н.",
+				"Solution": "Ежели бы все воевали только по своим убеждениям, войны бы не было.",
+				"Rating": "5"
+            }
+]
+
+</pre>
+</body>
+
+</html>
